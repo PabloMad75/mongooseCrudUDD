@@ -11,8 +11,9 @@ const app = express()
 //Middlewares
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-
+//Middlewares de rutas
 app.use('/api/v1', userRouter)
+
 
 db()
 
