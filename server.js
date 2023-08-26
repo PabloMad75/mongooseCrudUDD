@@ -1,4 +1,5 @@
 import express from 'express';
+import userRouter from './routes/user.routes.js'
 import { db } from './config/db.config.js'
 
 import dotenv from 'dotenv'
@@ -10,6 +11,8 @@ const app = express()
 //Middlewares
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+
+app.use('/api/v1', userRouter)
 
 db()
 
