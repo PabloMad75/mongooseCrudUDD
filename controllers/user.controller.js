@@ -1,4 +1,5 @@
 import {User} from '../models/User.model.js'
+import bcrypt from 'bcrypt'
 
 export const getAllUsers = async (req, res) => {
     try {
@@ -9,10 +10,29 @@ export const getAllUsers = async (req, res) => {
     }
 }
 
-export const createUser = async (req, res) => {
+export const signUp = async (req, res) => { //createUser
     try {
-        const newUser = req.body
-        const user = new User(newUser)
+        const {nombre, apellido, rut, edad, correo, password} = req.body
+
+        if(!nombre || !apellido || !rut || !edad || !correo || !password) {
+            return res.status(400).json({ message: "Debes rellenar todos los campos"})
+        }
+
+        const verifyUser = await User.findOne({ rut: rut })
+        if(verifyUser) {
+            return res.status(500).json({ message: 'El rut ingresado ya tiene una cuenta' })
+        }
+
+        const passwordEncrypt = await bcrypt.hash(password, 10)
+
+        const user = new User({
+            nombre,
+            apellido,
+            rut,
+            edad,
+            correo,
+            password: passwordEncrypt
+        })
         const saveUser = await user.save();
         res.status(201).json({message: `El usuario ${saveUser.nombre} ${saveUser.apellido} ha sido creado con éxito`})
     }catch(error){
