@@ -7,7 +7,7 @@ const userSchema = new Schema({
     rut: {type: String, required: true, unique: true},
     edad: {type: Number, required: true},
     correo: { type: String, required: true, unique: true},
-    password: { type: String, required: true}
+    password: { type: String, required: true},
 }, { versionKey: false})
 
 export const User = mongoose.model('users', userSchema)

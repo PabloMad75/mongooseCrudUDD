@@ -35,3 +35,18 @@ export const updateUser = async (req, res) => {
         res.status(500).json({message: 'No pudimos actualizar el usuario'})
     }
 }
+
+export const deleteUserByRut = async (req, res) => {
+    try {
+        const userRut = req.params.rut
+
+        const removeUser = await User.findOneAndDelete({rut: userRut})
+        if(!removeUser) {
+            return res.status(404).json({ message: "Usuario no encontrado para eliminar" })
+        }
+
+        res.status(202).json({message: `Usuario ${removeUser.nombre} ${removeUser.apellido} ha sido eliminado con éxito`})
+    } catch (error) {
+        res.status(500).json({message: 'No pudimos eliminar el usuario'})
+    }
+}
