@@ -20,3 +20,18 @@ export const createUser = async (req, res) => {
     }
 }
 
+export const updateUser = async (req, res) => {
+    try {
+        const userRut = req.params.rut
+        const updateData = req.body
+        
+        const updateUser = await User.findOneAndUpdate({ rut: userRut }, updateData, { new: true } )
+        if (!updateUser) {
+           return res.status(404).json({ message: 'Usuario no encontrado'})
+        }
+        
+        res.status(202).json({message: `Usuario ${updateUser.nombre} ${updateUser.apellido} ha sido actualizado con éxito`})
+    } catch (error) {
+        res.status(500).json({message: 'No pudimos actualizar el usuario'})
+    }
+}
