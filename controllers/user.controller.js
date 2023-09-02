@@ -14,7 +14,6 @@ export const getAllUsers = async (req, res) => {
 export const getUserByRut = async(req, res) => {
     try {
         const {rut} = req.params
-
         const getUser = await User.findOne({rut: rut})
         res.status(200).json(getUser)
     } catch (error) {
