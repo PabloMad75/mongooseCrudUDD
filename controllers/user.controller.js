@@ -11,6 +11,17 @@ export const getAllUsers = async (req, res) => {
     }
 }
 
+export const getUserByRut = async(req, res) => {
+    try {
+        const {rut} = req.params
+
+        const getUser = await User.findOne({rut: rut})
+        res.status(200).json(getUser)
+    } catch (error) {
+        res.status(404).json({message: 'No pudimos encontrar al usuario'})
+    }
+}
+
 export const signUp = async (req, res) => { //createUser
     try {
         const {nombre, apellido, rut, edad, correo, password} = req.body
