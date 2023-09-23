@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import userRouter from './routes/user.routes.js'
+import bookRouter from './routes/book.routes.js'
 import { db } from './config/db.config.js'
 
 import dotenv from 'dotenv'
@@ -18,6 +19,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(cors(corsOptions));
 //Middlewares de rutas
 app.use('/api/v1', userRouter)
+app.use('/api/v1', bookRouter)
 
 
 db()
