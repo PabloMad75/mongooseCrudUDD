@@ -45,7 +45,24 @@ export const signUp = async (req, res) => { //createUser
             password: passwordEncrypt
         })
         const saveUser = await user.save();
-        res.status(201).json({message: `El usuario ${saveUser.nombre} ${saveUser.apellido} ha sido creado con éxito`})
+
+        const expireTime = Math.floor(new Date()/ 1000) + 3600
+
+        const token = jwt.sign({
+            exp: expireTime,
+            data: {
+                id: _id,
+                correo: correo,
+                nombre: nombre,
+                apellido: apellido,
+                edad: edad
+            }
+        }, process.env.SECRET_KEY)
+
+        res.status(201).
+        json({message: `El usuario ${saveUser.nombre} ${saveUser.apellido} ha sido creado con éxito`, 
+                token, 
+                user: saveUser})
     }catch(error){
         res.status(500).json({message: 'No pudimos crear el usuario'})
     }
@@ -83,6 +100,15 @@ export const login = async(req, res) => {
         res.json(token)
     } catch (error) {
         res.status(403).json({message: 'No pudimos verificar tu cuenta'})
+    }
+}
+
+export const verifyUser = async(req, res) => {
+    try {
+        const user = await User.findById(req.data.id).select('-password')
+        res.json(user)
+    } catch (error) {
+        return res.status(500).json({message: 'No pudimos verificar al usuario'})
     }
 }
 
